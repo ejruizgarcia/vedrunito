@@ -117,7 +117,7 @@
             box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
             z-index: 1000;
             position: relative;
             padding: 0 20px;
@@ -125,21 +125,21 @@
 
         #footer-banner img {
             height: 55px;
-            margin-right: 15px;
             border-radius: 6px;
         }
 
         #footer-banner h1 {
             margin: 0;
-            font-size: 24px;
-            color: #333;
+            font-size: 22px;
+            color: #9abf38;
             letter-spacing: 0.5px;
+            text-align: right;
         }
 
         /* Estilos para el filtro sobreimpreso */
         #filtros-flotantes {
             position: absolute;
-            top: 20px;
+            top: 75px;
             right: 20px;
             background: rgba(255, 255, 255, 0.95);
             padding: 15px 20px;
@@ -218,7 +218,7 @@
         #btn-abrir-listado {
             position: absolute;
             top: 20px;
-            left: 60px; /* Separado de los controles de zoom del mapa */
+            right: 20px;
             background: #fff;
             border: none;
             padding: 12px 20px;
@@ -328,7 +328,7 @@
 
     <div id="map"></div>
 
-    <button id="btn-abrir-listado">Ver listado completo</button>
+    <button id="btn-abrir-listado">Ver listado</button>
 
     <!-- Filtros flotantes -->
     <div id="filtros-flotantes">
