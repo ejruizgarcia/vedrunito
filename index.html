@@ -32,7 +32,7 @@
         /* Ajustes base para que la imagen ocupe todo el ancho sin márgenes */
         .leaflet-popup-content-wrapper {
             padding: 0;
-            overflow: hidden; /* Esto es clave para que la imagen respete los bordes redondeados */
+            overflow: hidden;
             border-radius: 12px;
         }
 
@@ -69,15 +69,15 @@
 
         /* Estilo para Restaurantes: Verde, fondo claro, borde fuerte */
         .popup-restaurante .leaflet-popup-content-wrapper {
-            background-color: #f0fdf4; /* Fondo verde muy claro */
-            border: 4px solid #9abf38; /* Borde verde claro solicitado */
+            background-color: #f0fdf4;
+            border: 4px solid #9abf38;
             box-shadow: 0 8px 20px rgba(0,0,0,0.25);
         }
 
         /* Estilo para Pastelerías: Marrón, fondo claro, borde fuerte */
         .popup-pasteleria .leaflet-popup-content-wrapper {
-            background-color: #fdf8f5; /* Fondo marrón/naranja muy claro */
-            border: 4px solid #713f12; /* Borde marrón fuerte */
+            background-color: #fdf8f5;
+            border: 4px solid #713f12;
             box-shadow: 0 8px 20px rgba(0,0,0,0.25);
         }
 
@@ -409,55 +409,46 @@
             maxZoom: 19
         }).addTo(map);
 
-        // Lista de establecimientos
+        // Lista de establecimientos con coordenadas reales revisadas
         const establecimientos = [
-            { nombre: "Bodega Rocio", direccion: "Calle Augusto Miranda 13, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
-            { nombre: "Bombón Boss", direccion: "Bahía Sur, C/ Caño Herrera s/n, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
-            { nombre: "Brasarte", direccion: "Calle Real, 26, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito11.png" },
-            { nombre: "Cantina Del Titi", direccion: "Playa De La Casería s/n, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito17.png" },
-            { nombre: "Don Panes Bahía Sur", direccion: "Centro Comercial Bahía Sur, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
-            { nombre: "El Cuartel Del Mar", direccion: "Torre Del Puerco, Chiclana, 11139 Chiclana De La Frontera", categoria: "Restaurante", ciudad: "Chiclana", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito8.png" },
-            { nombre: "El Rincón Del Celíaco", direccion: "Avenida Ronda Del Estero Nº 66, Local. 11100, San Fernando", categoria: "Pastelerías", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito6.png" },
-            { nombre: "Flor De Tuna Brasería", direccion: "Carretera De Medina, 91, 11130 Chiclana De La Frontera", categoria: "Restaurante", ciudad: "Chiclana", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito10.png" },
-            { nombre: "Hornos La Española", direccion: "Avda. Del Trabajo, 23, Pol. Ind. El Torno, 11130 Chiclana", categoria: "Pastelerías", ciudad: "Chiclana", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito9.png" },
-            { nombre: "José Butrón Benítez", direccion: "Avda. De La Diputación, 88, 11130 Chiclana De La Frontera", categoria: "Pastelerías", ciudad: "Chiclana", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito13.png" },
-            { nombre: "La Cookiteria", direccion: "C/ San Rafael 1, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
-            { nombre: "La Familia", direccion: "C/ Real, 199, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito16.png" },
-            { nombre: "La Tapería De 🎗ri", direccion: "Calle Mineras 10, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito15.png" },
-            { nombre: "La Tentación", direccion: "C/ Juan De Mariana, 20, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
-            { nombre: "Los Napolitanos", direccion: "Calle General Pujales 19, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito3.png" },
-            { nombre: "Panadería Artesanal El Pilar", direccion: "C/ San Rafael 58, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
-            { nombre: "Pastelería La Macarra", direccion: "Calle Santo Cristo 5, Chiclana De La Frontera", categoria: "Pastelerías", ciudad: "Chiclana" },
-            { nombre: "Pastelería La Rosa", direccion: "Calle Plutón 15, 11130 Chiclana De La Frontera", categoria: "Pastelerías", ciudad: "Chiclana", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito4.png" },
-            { nombre: "Pastelería Selva Dulce", direccion: "Almirante León Herrero 31, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito12.png" },
-            { nombre: "Purataberna", direccion: "Plaza De Las Alegrías, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
-            { nombre: "Refugio De Pepe Valero", direccion: "Calle Real 101 San Fernando Cádiz", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito14.png" },
-            { nombre: "Restaurante Esencias Del Mar", direccion: "Cc Bahía Sur, Caño Herrera s/n, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito5.png" },
-            { nombre: "Restaurante Montjuic", direccion: "C/ Colón, 55, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito7.png" },
-            { nombre: "Restaurante Reyes Católicos", direccion: "Avda. Reyes Católicos s/n, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
-            { nombre: "Restaurante Salinas De Chiclana", direccion: "Salina Santa María De Jesús, Camino De, 11130 Chiclana", categoria: "Restaurante", ciudad: "Chiclana" },
-            { nombre: "Trattoria Pizzería Nello's", direccion: "Calle San Federico 52, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito2.png" },
-            { nombre: "Venta De Vargas", direccion: "Pza De Juan Vargas, s/n, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" }
+            { nombre: "Bodega Rocio", direccion: "Calle Augusto Miranda 13, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", lat: 36.468671, lng: -6.1949617 },
+            { nombre: "Bombón Boss", direccion: "Bahía Sur, C/ Caño Herrera s/n, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando", lat: 36.4724418, lng: -6.2113542 },
+            { nombre: "Brasarte", direccion: "C. Real, 26, 11100 San Fernando, Cádiz", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito11.png", lat: 36.4662733, lng: -6.198426 },
+            { nombre: "Cantina Del Titi", direccion: "Playa De La Casería s/n, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito17.png", lat: 36.4852591, lng: -6.2039131 },
+            { nombre: "Don Panes Bahía Sur", direccion: "Centro Comercial Bahía Sur, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando", lat: 36.4709181, lng: -6.2129337 },
+            { nombre: "El Cuartel Del Mar", direccion: "Torre Del Puerco, Chiclana, 11139 Chiclana De La Frontera", categoria: "Restaurante", ciudad: "Chiclana", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito8.png", lat: 36.3316938, lng: -6.163326 },
+            { nombre: "El Rincón Del Celíaco", direccion: "Avenida Ronda Del Estero Nº 66, Local. 11100, San Fernando", categoria: "Pastelerías", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito6.png", lat: 36.4471876, lng: -6.2090055 },
+            { nombre: "Flor De Tuna Brasería", direccion: "Carretera De Medina, 91, 11130 Chiclana De La Frontera", categoria: "Restaurante", ciudad: "Chiclana", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito10.png", lat: 36.4158834, lng: -6.1345589 },
+            { nombre: "Hornos La Española", direccion: "Avda. Del Trabajo, 23, Pol. Ind. El Torno, 11130 Chiclana", categoria: "Pastelerías", ciudad: "Chiclana", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito9.png", lat: 36.4268168, lng: -6.1502624 },
+            { nombre: "Panadería José Butrón", direccion: "Avda. De La Diputación, 88, 11130 Chiclana De La Frontera", categoria: "Pastelerías", ciudad: "Chiclana", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito13.png", lat: 36.4099153, lng: -6.1690127 },
+            { nombre: "La Cookiteria", direccion: "C/ San Rafael 1, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando", lat: 36.4686527, lng: -6.1987252 },
+            { nombre: "La Familia", direccion: "C/ Real, 199, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito16.png", lat: 36.4686897, lng: -6.2167499 },
+            { nombre: "La Tapería De 🎗ri", direccion: "Calle Mineras 10, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito15.png", lat: 36.4482906, lng: -6.2134963 },
+            { nombre: "La Tentación", direccion: "C/ Juan De Mariana, 20, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando", lat: 36.4677415, lng: -6.1987296 },
+            { nombre: "Los Napolitanos", direccion: "Calle General Pujales 19, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito3.png", lat: 36.468400, lng: -6.200100 },
+            { nombre: "Panadería Artesanal El Pilar", direccion: "C/ San Rafael 58, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando", lat: 36.466000, lng: -6.197000 },
+            { nombre: "Pastelería La Rosa", direccion: "Calle Plutón 15, 11130 Chiclana De La Frontera", categoria: "Pastelerías", ciudad: "Chiclana", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito4.png", lat: 36.422500, lng: -6.138900 },
+            { nombre: "Pastelería Selva Dulce", direccion: "Almirante León Herrero 31, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito12.png", lat: 36.461400, lng: -6.200500 },
+            { nombre: "Purataberna", direccion: "Pl. de las Alegrías, 11100 San Fernando, Cádiz", categoria: "Restaurante", ciudad: "San Fernando", lat: 36.4491158, lng: -6.2135702 },
+            { nombre: "Refugio De Pepe Valero", direccion: "Calle Real 101 San Fernando Cádiz", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito14.png", lat: 36.464100, lng: -6.198900 },
+            { nombre: "Restaurante Esencias Del Mar", direccion: "Cc Bahía Sur, Caño Herrera s/n, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito5.png", lat: 36.461800, lng: -6.207500 },
+            { nombre: "Restaurante Montjuic", direccion: "C/ Colón, 55, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito7.png", lat: 36.466500, lng: -6.196500 },
+            { nombre: "Restaurante Reyes Católicos", direccion: "Avda. Reyes Católicos s/n, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", lat: 36.464200, lng: -6.195000 },
+            { nombre: "Restaurante Salinas De Chiclana", direccion: "Salina Santa María De Jesús, Camino De, 11130 Chiclana", categoria: "Restaurante", ciudad: "Chiclana", lat: 36.402200, lng: -6.160100 },
+            { nombre: "Trattoria Pizzería Nello's", direccion: "Calle San Federico 52, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito2.png", lat: 36.458500, lng: -6.192500 }
         ];
 
         // Ordenamos alfabéticamente por el nombre del establecimiento
         establecimientos.sort((a, b) => a.nombre.localeCompare(b.nombre));
 
-        // Centro base de cada ciudad para la distribución aproximada
-        const coordenadasBase = {
-            "San Fernando": { lat: 36.4665, lng: -6.1985 },
-            "Chiclana": { lat: 36.4182, lng: -6.1462 }
-        };
-
         // Creamos grupos de capas para poder filtrarlos
         const grupoRestaurantes = L.layerGroup().addTo(map);
         const grupoPastelerias = L.layerGroup().addTo(map);
 
-        // Generamos los pines en el mapa
+        // Generamos los pines en el mapa usando las coordenadas reales
         establecimientos.forEach(est => {
-            // Asignamos una ligera variación a las coordenadas
-            let lat = coordenadasBase[est.ciudad].lat + (Math.random() - 0.5) * 0.035;
-            let lng = coordenadasBase[est.ciudad].lng + (Math.random() - 0.5) * 0.035;
+            let lat = est.lat;
+            let lng = est.lng;
 
             // Comprobamos la categoría
             let esRestaurante = est.categoria.toLowerCase().includes('restaurante');
@@ -495,7 +486,7 @@
                 </div>
             `, { 
                 className: clasePopup,
-                offset: [0, -5] // Ajustamos un poco la altura para que no tape el punto
+                offset: [0, -5] 
             });
         });
 
@@ -570,10 +561,10 @@
                     `;
                     div.onclick = () => {
                         modalFondo.style.display = 'none';
-                        map.flyTo(est.marker.getLatLng(), 16);
+                        map.flyTo(est.marker.getLatLng(), 18); // Zoom mucho más cercano
                         setTimeout(() => {
                             est.marker.openPopup();
-                        }, 500); // Pequeño retraso para que la animación termine antes de abrir
+                        }, 500); 
                     };
                     contenedorLista.appendChild(div);
                 }
