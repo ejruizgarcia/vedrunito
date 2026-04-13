@@ -288,8 +288,18 @@
             padding: 15px 20px;
             border-bottom: 1px solid #eee;
             display: flex;
-            gap: 20px;
+            flex-direction: column;
+            gap: 15px;
             background: #fff;
+        }
+
+        .filtros-fila {
+            display: flex;
+            gap: 20px;
+        }
+
+        .toggle-label input:checked + .toggle-switch.ciudad {
+            background-color: #0284c7;
         }
 
         #lista-establecimientos {
@@ -358,16 +368,30 @@
                 <button class="btn-cerrar-modal" id="btn-cerrar-modal">&times;</button>
             </div>
             <div class="modal-filtros">
-                <label class="toggle-label">
-                    <input type="checkbox" id="modal-toggle-restaurantes" checked>
-                    <div class="toggle-switch verde"></div>
-                    Restaurantes
-                </label>
-                <label class="toggle-label">
-                    <input type="checkbox" id="modal-toggle-pastelerias" checked>
-                    <div class="toggle-switch marron"></div>
-                    Pastelerías
-                </label>
+                <div class="filtros-fila">
+                    <label class="toggle-label">
+                        <input type="checkbox" id="modal-toggle-restaurantes" checked>
+                        <div class="toggle-switch verde"></div>
+                        Restaurantes
+                    </label>
+                    <label class="toggle-label">
+                        <input type="checkbox" id="modal-toggle-pastelerias" checked>
+                        <div class="toggle-switch marron"></div>
+                        Pastelerías
+                    </label>
+                </div>
+                <div class="filtros-fila">
+                    <label class="toggle-label">
+                        <input type="checkbox" id="modal-toggle-sf" checked>
+                        <div class="toggle-switch ciudad"></div>
+                        San Fernando
+                    </label>
+                    <label class="toggle-label">
+                        <input type="checkbox" id="modal-toggle-chiclana" checked>
+                        <div class="toggle-switch ciudad"></div>
+                        Chiclana
+                    </label>
+                </div>
             </div>
             <div id="lista-establecimientos"></div>
         </div>
@@ -388,33 +412,32 @@
         // Lista de establecimientos
         const establecimientos = [
             { nombre: "Bodega Rocio", direccion: "Calle Augusto Miranda 13, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
-            { nombre: "Bombon Boss", direccion: "Bahía Sur, C/ Caño Herrera s/n, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
+            { nombre: "Bombón Boss", direccion: "Bahía Sur, C/ Caño Herrera S/n, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
             { nombre: "Brasarte", direccion: "Calle Real, 26, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
-            { nombre: "Cantina del titi", direccion: "Playa de la caseria s/n, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
+            { nombre: "Cantina Del Titi", direccion: "Playa De La Casería S/n, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
             { nombre: "Don Panes Bahía Sur", direccion: "Centro Comercial Bahía Sur, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
-            { nombre: "El Cuartel del Mar", direccion: "Torre del Puerco, Chiclana, 11139 Chiclana de la Frontera", categoria: "Restaurante", ciudad: "Chiclana" },
-            { nombre: "El Rincón del Celiaco", direccion: "Avenida Ronda del Estero Nº 66, local. 11100, San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
-            { nombre: "Flor de Tuna Brasería", direccion: "Carretera de Medina, 91, 11130 Chiclana de la Frontera", categoria: "Restaurante", ciudad: "Chiclana" },
-            { nombre: "HORNOS LA ESPAÑOLA", direccion: "AVDA. DEL TRABAJO, 23 - POL. IND. EL TORNO - 11130 CHICLANA", categoria: "Pastelerías", ciudad: "Chiclana" },
-            { nombre: "José Butron Benítez", direccion: "Avda. de la diputación, 88, 11130 Chiclana de la Frontera", categoria: "Pastelerías", ciudad: "Chiclana" },
+            { nombre: "El Cuartel Del Mar", direccion: "Torre Del Puerco, Chiclana, 11139 Chiclana De La Frontera", categoria: "Restaurante", ciudad: "Chiclana" },
+            { nombre: "El Rincón Del Celíaco", direccion: "Avenida Ronda Del Estero Nº 66, Local. 11100, San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
+            { nombre: "Flor De Tuna Brasería", direccion: "Carretera De Medina, 91, 11130 Chiclana De La Frontera", categoria: "Restaurante", ciudad: "Chiclana" },
+            { nombre: "Hornos La Española", direccion: "Avda. Del Trabajo, 23, Pol. Ind. El Torno, 11130 Chiclana", categoria: "Pastelerías", ciudad: "Chiclana" },
+            { nombre: "José Butrón Benítez", direccion: "Avda. De La Diputación, 88, 11130 Chiclana De La Frontera", categoria: "Pastelerías", ciudad: "Chiclana" },
             { nombre: "La Cookiteria", direccion: "C/ San Rafael 1, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
             { nombre: "La Familia", direccion: "C/ Real, 199, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
-            { nombre: "LA TAPERIA DE 🎗RI", direccion: "Calle Mineras 10, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
-            { nombre: "La Tentación", direccion: "C/ Juan de Mariana, 20, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
-            { nombre: "Litos córner", direccion: "Almirante leon herrero, 31, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
+            { nombre: "La Tapería De 🎗ri", direccion: "Calle Mineras 10, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
+            { nombre: "La Tentación", direccion: "C/ Juan De Mariana, 20, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
             { nombre: "Los Napolitanos", direccion: "Calle General Pujales 19, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
             { nombre: "Panadería Artesanal El Pilar", direccion: "C/ San Rafael 58, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
-            { nombre: "PASTELERÍA LA MACARRA", direccion: "Calle santo Cristo 5, Chiclana de la Frontera", categoria: "Pastelerías", ciudad: "Chiclana" },
-            { nombre: "Pastelería la Rosa", direccion: "Calle Plutón 15, 11130 Chiclana de la frontera", categoria: "Pastelerías", ciudad: "Chiclana" },
-            { nombre: "pastelería selva dulce", direccion: "Almirante león herrero 31, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
-            { nombre: "Purataberna", direccion: "Plaza de las alegrías, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
-            { nombre: "REFUGIO de pepe valero", direccion: "Calle Real 101 San fernando cadiz", categoria: "Restaurante", ciudad: "San Fernando" },
-            { nombre: "Restaurante Esencias del Mar", direccion: "CC Bahía Sur, Caño Herrera S/S, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
+            { nombre: "Pastelería La Macarra", direccion: "Calle Santo Cristo 5, Chiclana De La Frontera", categoria: "Pastelerías", ciudad: "Chiclana" },
+            { nombre: "Pastelería La Rosa", direccion: "Calle Plutón 15, 11130 Chiclana De La Frontera", categoria: "Pastelerías", ciudad: "Chiclana" },
+            { nombre: "Pastelería Selva Dulce", direccion: "Almirante León Herrero 31, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
+            { nombre: "Purataberna", direccion: "Plaza De Las Alegrías, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
+            { nombre: "Refugio De Pepe Valero", direccion: "Calle Real 101 San Fernando Cádiz", categoria: "Restaurante", ciudad: "San Fernando" },
+            { nombre: "Restaurante Esencias Del Mar", direccion: "Cc Bahía Sur, Caño Herrera S/s, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
             { nombre: "Restaurante Montjuic", direccion: "C/ Colón, 55, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
-            { nombre: "Restaurante Reyes Católicos", direccion: "Avda. Reyes Católicos S/N, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
-            { nombre: "Restaurante Salinas de Chiclana", direccion: "Salina Santa María de Jesús, Camino de, 11130 Chiclana", categoria: "Restaurante", ciudad: "Chiclana" },
-            { nombre: "Trattoria pizzeria Nello's", direccion: "Calle san Federico 52, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
-            { nombre: "Venta de Vargas", direccion: "Pza de Juan Vargas, S/N, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" }
+            { nombre: "Restaurante Reyes Católicos", direccion: "Avda. Reyes Católicos S/n, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
+            { nombre: "Restaurante Salinas De Chiclana", direccion: "Salina Santa María De Jesús, Camino De, 11130 Chiclana", categoria: "Restaurante", ciudad: "Chiclana" },
+            { nombre: "Trattoria Pizzería Nello's", direccion: "Calle San Federico 52, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
+            { nombre: "Venta De Vargas", direccion: "Pza De Juan Vargas, S/n, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" }
         ];
 
         // Ordenamos alfabéticamente por el nombre del establecimiento
@@ -502,6 +525,10 @@
             renderizarLista();
         });
 
+        // Eventos para los nuevos filtros de ciudad
+        document.getElementById('modal-toggle-sf').addEventListener('change', renderizarLista);
+        document.getElementById('modal-toggle-chiclana').addEventListener('change', renderizarLista);
+
         function actualizarCapasMapa() {
             const mostrarRestaurantes = document.getElementById('toggle-restaurantes').checked;
             if (mostrarRestaurantes) map.addLayer(grupoRestaurantes);
@@ -523,10 +550,18 @@
             
             const mostrarRestaurantes = document.getElementById('modal-toggle-restaurantes').checked;
             const mostrarPastelerias = document.getElementById('modal-toggle-pastelerias').checked;
+            const mostrarSF = document.getElementById('modal-toggle-sf').checked;
+            const mostrarChiclana = document.getElementById('modal-toggle-chiclana').checked;
 
             establecimientos.forEach(est => {
                 let esRestaurante = est.categoria.toLowerCase().includes('restaurante');
-                if ((esRestaurante && mostrarRestaurantes) || (!esRestaurante && mostrarPastelerias)) {
+                let pasaCategoria = (esRestaurante && mostrarRestaurantes) || (!esRestaurante && mostrarPastelerias);
+                
+                let pasaCiudad = false;
+                if (est.ciudad === "San Fernando" && mostrarSF) pasaCiudad = true;
+                if (est.ciudad === "Chiclana" && mostrarChiclana) pasaCiudad = true;
+
+                if (pasaCategoria && pasaCiudad) {
                     let div = document.createElement('div');
                     div.className = 'item-lista';
                     div.innerHTML = `
