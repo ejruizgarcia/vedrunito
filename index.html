@@ -1,1 +1,568 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>II Ruta del Dulce Vedruna</title>
+    
+    <!-- Hoja de estilos del mapa Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #map {
+            flex-grow: 1;
+            width: 100vw;
+        }
 
+        /* Ocultamos el pico inferior para un diseño más limpio con los bordes fuertes */
+        .leaflet-popup-tip-container {
+            display: none;
+        }
+
+        /* Ajustes base para que la imagen ocupe todo el ancho sin márgenes */
+        .leaflet-popup-content-wrapper {
+            padding: 0;
+            overflow: hidden; /* Esto es clave para que la imagen respete los bordes redondeados */
+            border-radius: 12px;
+        }
+
+        .leaflet-popup-content {
+            margin: 0;
+            width: 260px !important;
+        }
+
+        /* Estilo para la X de cerrar más moderna */
+        .leaflet-container a.leaflet-popup-close-button {
+            top: 8px;
+            right: 8px;
+            width: 28px;
+            height: 28px;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+            z-index: 10;
+            padding: 0;
+            text-decoration: none;
+        }
+
+        .leaflet-container a.leaflet-popup-close-button:hover {
+            background-color: #333;
+            color: #fff;
+        }
+
+        /* Estilo para Restaurantes: Verde, fondo claro, borde fuerte */
+        .popup-restaurante .leaflet-popup-content-wrapper {
+            background-color: #f0fdf4; /* Fondo verde muy claro */
+            border: 4px solid #9abf38; /* Borde verde claro solicitado */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+        }
+
+        /* Estilo para Pastelerías: Marrón, fondo claro, borde fuerte */
+        .popup-pasteleria .leaflet-popup-content-wrapper {
+            background-color: #fdf8f5; /* Fondo marrón/naranja muy claro */
+            border: 4px solid #713f12; /* Borde marrón fuerte */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+        }
+
+        /* Estilo para la imagen superior a sangre */
+        .popup-imagen {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            display: block;
+            margin: 0;
+        }
+
+        /* Contenedor interno de los textos */
+        .popup-info {
+            padding: 16px;
+            color: #333;
+        }
+
+        .popup-info h3 {
+            margin: 0 0 8px 0;
+            font-size: 18px;
+            font-weight: 700;
+            color: #111;
+        }
+
+        .popup-info p {
+            margin: 5px 0;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #444;
+        }
+
+        /* Estilos para el banner inferior */
+        #footer-banner {
+            height: 80px;
+            background-color: #ffffff;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        #footer-banner img {
+            height: 55px;
+            margin-right: 15px;
+            border-radius: 6px;
+        }
+
+        #footer-banner h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+            letter-spacing: 0.5px;
+        }
+
+        /* Estilos para el filtro sobreimpreso */
+        #filtros-flotantes {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            color: #333;
+        }
+
+        .toggle-label input {
+            display: none;
+        }
+
+        .toggle-switch {
+            width: 44px;
+            height: 24px;
+            background-color: #ccc;
+            border-radius: 24px;
+            position: relative;
+            margin-right: 12px;
+            transition: background-color 0.3s;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: white;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .toggle-label input:checked + .toggle-switch.verde {
+            background-color: #9abf38;
+        }
+
+        .toggle-label input:checked + .toggle-switch.marron {
+            background-color: #713f12;
+        }
+
+        .toggle-label input:checked + .toggle-switch::after {
+            transform: translateX(20px);
+        }
+
+        /* Estilos para los pines personalizados (círculos de colores) */
+        .marker-restaurante {
+            background-color: #9abf38;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 4px rgba(0,0,0,0.6);
+        }
+
+        .marker-pasteleria {
+            background-color: #713f12;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 4px rgba(0,0,0,0.6);
+        }
+
+        /* Estilos para el botón del listado y el modal */
+        #btn-abrir-listado {
+            position: absolute;
+            top: 20px;
+            left: 60px; /* Separado de los controles de zoom del mapa */
+            background: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 1000;
+            font-size: 15px;
+            transition: background 0.3s;
+        }
+
+        #btn-abrir-listado:hover {
+            background: #f0f0f0;
+        }
+
+        #modal-fondo {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #modal-cuerpo {
+            background: #fff;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .modal-cabecera {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8f8f8;
+        }
+
+        .modal-cabecera h2 {
+            margin: 0;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .btn-cerrar-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .modal-filtros {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            gap: 20px;
+            background: #fff;
+        }
+
+        #lista-establecimientos {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px 20px;
+        }
+
+        .item-lista {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-radius: 8px;
+            margin-bottom: 5px;
+        }
+
+        .item-lista:hover {
+            background: #f9f9f9;
+        }
+
+        .item-lista h4 {
+            margin: 0 0 5px 0;
+            color: #222;
+            font-size: 16px;
+        }
+
+        .item-lista p {
+            margin: 0;
+            font-size: 13px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="map"></div>
+
+    <button id="btn-abrir-listado">Ver listado completo</button>
+
+    <!-- Filtros flotantes -->
+    <div id="filtros-flotantes">
+        <label class="toggle-label">
+            <input type="checkbox" id="toggle-restaurantes" checked>
+            <div class="toggle-switch verde"></div>
+            Restaurantes
+        </label>
+        <label class="toggle-label">
+            <input type="checkbox" id="toggle-pastelerias" checked>
+            <div class="toggle-switch marron"></div>
+            Pastelerías
+        </label>
+    </div>
+
+    <!-- Banner inferior -->
+    <div id="footer-banner">
+        <img src="https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunalogo.jpg" alt="Logo Vedruna">
+        <h1>II Ruta del Dulce Vedruna</h1>
+    </div>
+
+    <!-- Modal del listado -->
+    <div id="modal-fondo">
+        <div id="modal-cuerpo">
+            <div class="modal-cabecera">
+                <h2>Establecimientos</h2>
+                <button class="btn-cerrar-modal" id="btn-cerrar-modal">&times;</button>
+            </div>
+            <div class="modal-filtros">
+                <label class="toggle-label">
+                    <input type="checkbox" id="modal-toggle-restaurantes" checked>
+                    <div class="toggle-switch verde"></div>
+                    Restaurantes
+                </label>
+                <label class="toggle-label">
+                    <input type="checkbox" id="modal-toggle-pastelerias" checked>
+                    <div class="toggle-switch marron"></div>
+                    Pastelerías
+                </label>
+            </div>
+            <div id="lista-establecimientos"></div>
+        </div>
+    </div>
+
+    <!-- Script del mapa Leaflet -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Centramos el mapa entre San Fernando y Chiclana
+        const map = L.map('map').setView([36.4420, -6.1720], 12);
+
+        // Cargamos los mapas de fondo de CartoDB para evitar bloqueos
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap &copy; CARTO',
+            maxZoom: 19
+        }).addTo(map);
+
+        // Lista de establecimientos
+        const establecimientos = [
+            { nombre: "Bodega Rocio", direccion: "Calle Augusto Miranda 13, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
+            { nombre: "Bombon Boss", direccion: "Bahía Sur, C/ Caño Herrera s/n, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
+            { nombre: "Brasarte", direccion: "Calle Real, 26, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
+            { nombre: "Cantina del titi", direccion: "Playa de la caseria s/n, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
+            { nombre: "Don Panes Bahía Sur", direccion: "Centro Comercial Bahía Sur, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
+            { nombre: "El Cuartel del Mar", direccion: "Torre del Puerco, Chiclana, 11139 Chiclana de la Frontera", categoria: "Restaurante", ciudad: "Chiclana" },
+            { nombre: "El Rincón del Celiaco", direccion: "Avenida Ronda del Estero Nº 66, local. 11100, San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
+            { nombre: "Flor de Tuna Brasería", direccion: "Carretera de Medina, 91, 11130 Chiclana de la Frontera", categoria: "Restaurante", ciudad: "Chiclana" },
+            { nombre: "HORNOS LA ESPAÑOLA", direccion: "AVDA. DEL TRABAJO, 23 - POL. IND. EL TORNO - 11130 CHICLANA", categoria: "Pastelerías", ciudad: "Chiclana" },
+            { nombre: "José Butron Benítez", direccion: "Avda. de la diputación, 88, 11130 Chiclana de la Frontera", categoria: "Pastelerías", ciudad: "Chiclana" },
+            { nombre: "La Cookiteria", direccion: "C/ San Rafael 1, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
+            { nombre: "La Familia", direccion: "C/ Real, 199, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
+            { nombre: "LA TAPERIA DE 🎗RI", direccion: "Calle Mineras 10, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
+            { nombre: "La Tentación", direccion: "C/ Juan de Mariana, 20, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
+            { nombre: "Litos córner", direccion: "Almirante leon herrero, 31, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
+            { nombre: "Los Napolitanos", direccion: "Calle General Pujales 19, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
+            { nombre: "Panadería Artesanal El Pilar", direccion: "C/ San Rafael 58, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
+            { nombre: "PASTELERÍA LA MACARRA", direccion: "Calle santo Cristo 5, Chiclana de la Frontera", categoria: "Pastelerías", ciudad: "Chiclana" },
+            { nombre: "Pastelería la Rosa", direccion: "Calle Plutón 15, 11130 Chiclana de la frontera", categoria: "Pastelerías", ciudad: "Chiclana" },
+            { nombre: "pastelería selva dulce", direccion: "Almirante león herrero 31, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
+            { nombre: "Purataberna", direccion: "Plaza de las alegrías, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
+            { nombre: "REFUGIO de pepe valero", direccion: "Calle Real 101 San fernando cadiz", categoria: "Restaurante", ciudad: "San Fernando" },
+            { nombre: "Restaurante Esencias del Mar", direccion: "CC Bahía Sur, Caño Herrera S/S, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
+            { nombre: "Restaurante Montjuic", direccion: "C/ Colón, 55, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
+            { nombre: "Restaurante Reyes Católicos", direccion: "Avda. Reyes Católicos S/N, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
+            { nombre: "Restaurante Salinas de Chiclana", direccion: "Salina Santa María de Jesús, Camino de, 11130 Chiclana", categoria: "Restaurante", ciudad: "Chiclana" },
+            { nombre: "Trattoria pizzeria Nello's", direccion: "Calle san Federico 52, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
+            { nombre: "Venta de Vargas", direccion: "Pza de Juan Vargas, S/N, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" }
+        ];
+
+        // Ordenamos alfabéticamente por el nombre del establecimiento
+        establecimientos.sort((a, b) => a.nombre.localeCompare(b.nombre));
+
+        // Centro base de cada ciudad para la distribución aproximada
+        const coordenadasBase = {
+            "San Fernando": { lat: 36.4665, lng: -6.1985 },
+            "Chiclana": { lat: 36.4182, lng: -6.1462 }
+        };
+
+        // Creamos grupos de capas para poder filtrarlos
+        const grupoRestaurantes = L.layerGroup().addTo(map);
+        const grupoPastelerias = L.layerGroup().addTo(map);
+
+        // Generamos los pines en el mapa
+        establecimientos.forEach(est => {
+            // Asignamos una ligera variación a las coordenadas
+            let lat = coordenadasBase[est.ciudad].lat + (Math.random() - 0.5) * 0.035;
+            let lng = coordenadasBase[est.ciudad].lng + (Math.random() - 0.5) * 0.035;
+
+            // Comprobamos la categoría
+            let esRestaurante = est.categoria.toLowerCase().includes('restaurante');
+            
+            // Definimos la imagen por defecto o la propia del establecimiento si existe
+            let imagenUrl = est.imagen || "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito1.png";
+
+            // Creamos un icono visual personalizado (verde o marrón)
+            let iconClass = esRestaurante ? 'marker-restaurante' : 'marker-pasteleria';
+            let customIcon = L.divIcon({
+                className: iconClass,
+                iconSize: [16, 16]
+            });
+
+            let clasePopup = esRestaurante ? 'popup-restaurante' : 'popup-pasteleria';
+
+            // Seleccionamos el grupo correspondiente según la categoría
+            let grupoDestino = esRestaurante ? grupoRestaurantes : grupoPastelerias;
+
+            // Añadimos el marcador al grupo correspondiente en lugar de al mapa directamente
+            let marker = L.marker([lat, lng], { icon: customIcon }).addTo(grupoDestino);
+            
+            // Guardamos la referencia del marcador dentro de los datos para poder usarlo desde la lista
+            est.marker = marker;
+
+            // Asignamos la ficha informativa
+            marker.bindPopup(`
+                <div class="popup-content">
+                    <img src="${imagenUrl}" alt="Imagen del local" class="popup-imagen">
+                    <div class="popup-info">
+                        <h3>${est.nombre}</h3>
+                        <p><strong>Dirección:</strong> ${est.direccion}</p>
+                        <p><strong>Categoría:</strong> ${est.categoria}</p>
+                    </div>
+                </div>
+            `, { 
+                className: clasePopup,
+                offset: [0, -5] // Ajustamos un poco la altura para que no tape el punto
+            });
+        });
+
+        // Lógica interactiva para los interruptores toggle y sincronización
+        document.getElementById('toggle-restaurantes').addEventListener('change', function(e) {
+            document.getElementById('modal-toggle-restaurantes').checked = e.target.checked;
+            actualizarCapasMapa();
+            renderizarLista();
+        });
+
+        document.getElementById('toggle-pastelerias').addEventListener('change', function(e) {
+            document.getElementById('modal-toggle-pastelerias').checked = e.target.checked;
+            actualizarCapasMapa();
+            renderizarLista();
+        });
+
+        // Lógica para los interruptores dentro del modal
+        document.getElementById('modal-toggle-restaurantes').addEventListener('change', function(e) {
+            document.getElementById('toggle-restaurantes').checked = e.target.checked;
+            actualizarCapasMapa();
+            renderizarLista();
+        });
+
+        document.getElementById('modal-toggle-pastelerias').addEventListener('change', function(e) {
+            document.getElementById('toggle-pastelerias').checked = e.target.checked;
+            actualizarCapasMapa();
+            renderizarLista();
+        });
+
+        function actualizarCapasMapa() {
+            const mostrarRestaurantes = document.getElementById('toggle-restaurantes').checked;
+            if (mostrarRestaurantes) map.addLayer(grupoRestaurantes);
+            else map.removeLayer(grupoRestaurantes);
+            
+            const mostrarPastelerias = document.getElementById('toggle-pastelerias').checked;
+            if (mostrarPastelerias) map.addLayer(grupoPastelerias);
+            else map.removeLayer(grupoPastelerias);
+        }
+
+        // Gestión del modal y la lista
+        const modalFondo = document.getElementById('modal-fondo');
+        const btnAbrirListado = document.getElementById('btn-abrir-listado');
+        const btnCerrarModal = document.getElementById('btn-cerrar-modal');
+        const contenedorLista = document.getElementById('lista-establecimientos');
+
+        function renderizarLista() {
+            contenedorLista.innerHTML = '';
+            
+            const mostrarRestaurantes = document.getElementById('modal-toggle-restaurantes').checked;
+            const mostrarPastelerias = document.getElementById('modal-toggle-pastelerias').checked;
+
+            establecimientos.forEach(est => {
+                let esRestaurante = est.categoria.toLowerCase().includes('restaurante');
+                if ((esRestaurante && mostrarRestaurantes) || (!esRestaurante && mostrarPastelerias)) {
+                    let div = document.createElement('div');
+                    div.className = 'item-lista';
+                    div.innerHTML = `
+                        <h4>${est.nombre}</h4>
+                        <p>${est.categoria} en ${est.ciudad}</p>
+                    `;
+                    div.onclick = () => {
+                        modalFondo.style.display = 'none';
+                        map.flyTo(est.marker.getLatLng(), 16);
+                        setTimeout(() => {
+                            est.marker.openPopup();
+                        }, 500); // Pequeño retraso para que la animación termine antes de abrir
+                    };
+                    contenedorLista.appendChild(div);
+                }
+            });
+        }
+
+        btnAbrirListado.onclick = () => {
+            renderizarLista();
+            modalFondo.style.display = 'flex';
+        };
+
+        btnCerrarModal.onclick = () => {
+            modalFondo.style.display = 'none';
+        };
+
+        // Cerrar el modal pinchando fuera
+        modalFondo.onclick = (e) => {
+            if (e.target === modalFondo) {
+                modalFondo.style.display = 'none';
+            }
+        };
+        
+        // Render inicial 
+        renderizarLista();
+    </script>
+</body>
+</html>
