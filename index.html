@@ -322,15 +322,15 @@
         }
 
         .item-lista h4 {
-            margin: 0 0 5px 0;
+            margin: 0 0 2px 0;
             color: #222;
             font-size: 16px;
         }
 
         .item-lista p {
             margin: 0;
-            font-size: 13px;
-            color: #666;
+            font-size: 12px;
+            color: #888;
         }
     </style>
 </head>
@@ -412,9 +412,9 @@
         // Lista de establecimientos
         const establecimientos = [
             { nombre: "Bodega Rocio", direccion: "Calle Augusto Miranda 13, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
-            { nombre: "Bombón Boss", direccion: "Bahía Sur, C/ Caño Herrera S/n, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
+            { nombre: "Bombón Boss", direccion: "Bahía Sur, C/ Caño Herrera s/n, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
             { nombre: "Brasarte", direccion: "Calle Real, 26, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito11.png" },
-            { nombre: "Cantina Del Titi", direccion: "Playa De La Casería S/n, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito17.png" },
+            { nombre: "Cantina Del Titi", direccion: "Playa De La Casería s/n, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito17.png" },
             { nombre: "Don Panes Bahía Sur", direccion: "Centro Comercial Bahía Sur, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando" },
             { nombre: "El Cuartel Del Mar", direccion: "Torre Del Puerco, Chiclana, 11139 Chiclana De La Frontera", categoria: "Restaurante", ciudad: "Chiclana", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito8.png" },
             { nombre: "El Rincón Del Celíaco", direccion: "Avenida Ronda Del Estero Nº 66, Local. 11100, San Fernando", categoria: "Pastelerías", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito6.png" },
@@ -432,12 +432,12 @@
             { nombre: "Pastelería Selva Dulce", direccion: "Almirante León Herrero 31, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito12.png" },
             { nombre: "Purataberna", direccion: "Plaza De Las Alegrías, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
             { nombre: "Refugio De Pepe Valero", direccion: "Calle Real 101 San Fernando Cádiz", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito14.png" },
-            { nombre: "Restaurante Esencias Del Mar", direccion: "Cc Bahía Sur, Caño Herrera S/s, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito5.png" },
+            { nombre: "Restaurante Esencias Del Mar", direccion: "Cc Bahía Sur, Caño Herrera s/n, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito5.png" },
             { nombre: "Restaurante Montjuic", direccion: "C/ Colón, 55, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito7.png" },
-            { nombre: "Restaurante Reyes Católicos", direccion: "Avda. Reyes Católicos S/n, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
+            { nombre: "Restaurante Reyes Católicos", direccion: "Avda. Reyes Católicos s/n, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" },
             { nombre: "Restaurante Salinas De Chiclana", direccion: "Salina Santa María De Jesús, Camino De, 11130 Chiclana", categoria: "Restaurante", ciudad: "Chiclana" },
             { nombre: "Trattoria Pizzería Nello's", direccion: "Calle San Federico 52, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito2.png" },
-            { nombre: "Venta De Vargas", direccion: "Pza De Juan Vargas, S/n, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" }
+            { nombre: "Venta De Vargas", direccion: "Pza De Juan Vargas, s/n, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando" }
         ];
 
         // Ordenamos alfabéticamente por el nombre del establecimiento
@@ -566,6 +566,7 @@
                     div.className = 'item-lista';
                     div.innerHTML = `
                         <h4>${est.nombre}</h4>
+                        <p>${est.direccion}</p>
                     `;
                     div.onclick = () => {
                         modalFondo.style.display = 'none';
