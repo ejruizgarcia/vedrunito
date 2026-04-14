@@ -211,7 +211,22 @@
             z-index: 1000;
         }
 
-        #modal-fondo {
+        #btn-patrocinadores {
+            position: absolute;
+            bottom: 100px;
+            left: 20px;
+            background: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        #modal-fondo, #modal-patrocinadores-fondo {
             display: none;
             position: fixed;
             top: 0;
@@ -230,6 +245,18 @@
             max-width: 600px;
             max-height: 80vh;
             border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #modal-patrocinadores-cuerpo {
+            background: #fff;
+            width: 90%;
+            max-width: 800px;
+            max-height: 85vh;
+            border-radius: 12px;
+            border: 4px solid #9abf38;
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -312,6 +339,7 @@
     </div>
 
     <button id="btn-abrir-listado">Ver listado</button>
+    <button id="btn-patrocinadores">Patrocinadores</button>
 
     <div id="footer-banner">
         <img src="https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunalogo.jpg" alt="Logo Vedruna">
@@ -354,6 +382,18 @@
                 </div>
             </div>
             <div id="lista-establecimientos"></div>
+        </div>
+    </div>
+
+    <div id="modal-patrocinadores-fondo">
+        <div id="modal-patrocinadores-cuerpo">
+            <div class="modal-cabecera">
+                <h2 style="color: #9abf38; margin: 0;">Patrocinadores</h2>
+                <button onclick="document.getElementById('modal-patrocinadores-fondo').style.display='none'" style="cursor:pointer; background:none; border:none; font-size:24px; color: #666;">&times;</button>
+            </div>
+            <div style="padding: 20px; text-align: center; overflow-y: auto; flex-grow: 1;">
+                <img src="https://raw.githubusercontent.com/ejruizgarcia/images/main/patrocinadores.png" alt="Nuestros Patrocinadores" style="max-width: 100%; height: auto; border-radius: 8px;">
+            </div>
         </div>
     </div>
 
@@ -568,6 +608,22 @@
             document.getElementById('modal-fondo').style.display = 'flex';
             document.getElementById('buscador-listado').value = '';
             renderizarLista();
+        };
+
+        document.getElementById('btn-patrocinadores').onclick = () => {
+            document.getElementById('modal-patrocinadores-fondo').style.display = 'flex';
+        };
+
+        document.getElementById('modal-fondo').onclick = (e) => {
+            if (e.target === document.getElementById('modal-fondo')) {
+                document.getElementById('modal-fondo').style.display = 'none';
+            }
+        };
+
+        document.getElementById('modal-patrocinadores-fondo').onclick = (e) => {
+            if (e.target === document.getElementById('modal-patrocinadores-fondo')) {
+                document.getElementById('modal-patrocinadores-fondo').style.display = 'none';
+            }
         };
 
         crearMarcadores();
