@@ -559,17 +559,40 @@
             const imagenUrl = est.imagen || "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito1.png";
             const textoMensaje = `¿Has probado el "vedrunito" de ${est.nombre}? Ven a probarlo antes del 10 de mayo! #IIRutaDelDulceVedruna`;
             
-            if (navigator.share) {
-                try {
+            const originalHTML = btnElement.innerHTML;
+            btnElement.style.opacity = '0.5';
+
+            try {
+                // Descargamos la imagen internamente para compartirla como archivo físico
+                const response = await fetch(imagenUrl);
+                const blob = await response.blob();
+                const file = new File([blob], 'vedrunito.png', { type: blob.type });
+
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    // Compartir la imagen física y el texto
+                    await navigator.share({
+                        text: textoMensaje,
+                        files: [file]
+                    });
+                    btnElement.style.opacity = '1';
+                } else if (navigator.share) {
+                    // Respaldo de seguridad si el dispositivo antiguo no admite archivos
                     await navigator.share({
                         title: 'II Ruta del Dulce Vedruna',
                         text: textoMensaje,
                         url: imagenUrl
                     });
-                } catch (err) {
-                    console.log('Operación de compartir cancelada o no soportada.');
+                    btnElement.style.opacity = '1';
+                } else {
+                    throw new Error('API de compartir no soportada');
                 }
-            } else {
+            } catch (err) {
+                btnElement.style.opacity = '1';
+                
+                // Si el usuario simplemente canceló la ventana de compartir, no hacemos nada más
+                if (err.name === 'AbortError') return;
+
+                console.log('Uso de portapapeles alternativo:', err);
                 const tempInput = document.createElement("textarea");
                 tempInput.value = textoMensaje + " " + imagenUrl;
                 document.body.appendChild(tempInput);
@@ -577,7 +600,6 @@
                 document.execCommand("copy");
                 document.body.removeChild(tempInput);
                 
-                const originalHTML = btnElement.innerHTML;
                 btnElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9abf38" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
                 setTimeout(() => { btnElement.innerHTML = originalHTML; }, 2000);
             }
