@@ -184,6 +184,7 @@
         .toggle-label input:checked + .toggle-switch.verde { background-color: #9abf38; }
         .toggle-label input:checked + .toggle-switch.marron { background-color: #713f12; }
         .toggle-label input:checked + .toggle-switch.ciudad { background-color: #0284c7; }
+        .toggle-label input:checked + .toggle-switch.rojo { background-color: #dc2626; }
         .toggle-label input:checked + .toggle-switch::after { transform: translateX(16px); }
 
         .dot-marker {
@@ -195,6 +196,19 @@
         }
         .dot-restaurante { background-color: #9abf38; }
         .dot-pasteleria { background-color: #713f12; }
+
+        #btn-exportar {
+            display: none;
+            background: #222;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+        }
 
         #btn-abrir-listado {
             position: absolute;
@@ -500,7 +514,7 @@
                 descripcion: "Inspirada en la pureza de Santa Joaquina, esta tarta de queso destaca por su relleno blanco de crema suave y equilibrada. La almendra natural tostada y el sirope de frambuesas caramelizadas aportan profundidad de sabor y un contraste fresco y crujiente."
             },
             { 
-                nombre: "Restaurante Salinas de Chiclana", direccion: "Salina Santa María De Jesús, Camino De, 11130 Chiclana", categoria: "Restaurante", ciudad: "Chiclana", lat: 36.3868801, lng: -6.1870623, imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito30.png",
+                nombre: "Restaurante Salinas de Chiclana", direccion: "Salina Santa María De Jesús, Camino De, 11130 Chiclana", categoria: "Restaurante", ciudad: "Chiclana", lat: 36.4392892, lng: -6.1645317, imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito30.png",
                 descripcion: "Bajo el nombre Veracha, esta pieza rinde tributo al paisaje salinero imitando las montañas de sal de las marismas. Una pirámide de chocolate blanco que oculta un relleno audaz de almendras locales, camarones deshidratados y flor de sal para una experiencia umami única."
             },
             { 
@@ -606,6 +620,10 @@
 
         document.getElementById('btn-abrir-listado').onclick = () => {
             document.getElementById('modal-fondo').style.display = 'flex';
+            document.getElementById('modal-titulo').innerText = 'Listado';
+            document.getElementById('lista-establecimientos').style.display = 'block';
+            document.querySelector('.modal-buscador-container').style.display = 'block';
+            document.querySelector('.modal-filtros-container').style.display = 'flex';
             document.getElementById('buscador-listado').value = '';
             renderizarLista();
         };
