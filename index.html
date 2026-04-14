@@ -83,11 +83,39 @@
             color: #333;
         }
 
-        .popup-info h3 {
-            margin: 0 0 8px 0;
+        .cabecera-popup {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            gap: 10px;
+        }
+
+        .cabecera-popup h3 {
+            margin: 0;
             font-size: 18px;
             font-weight: 700;
             color: #111;
+        }
+
+        .btn-compartir {
+            background: #f4f4f4;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #555;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .btn-compartir:hover {
+            background: #e0e0e0;
+            color: #000;
         }
 
         .popup-info p {
@@ -526,11 +554,40 @@
         const grupoRestaurantes = L.layerGroup().addTo(map);
         const grupoPastelerias = L.layerGroup().addTo(map);
 
+        window.compartirLocal = async function(index, btnElement) {
+            const est = establecimientos[index];
+            const imagenUrl = est.imagen || "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito1.png";
+            const textoMensaje = `¿Has probado el "vedrunito" de ${est.nombre}? Ven a probarlo antes del 10 de mayo! #IIRutaDelDulceVedruna`;
+            
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: 'II Ruta del Dulce Vedruna',
+                        text: textoMensaje,
+                        url: imagenUrl
+                    });
+                } catch (err) {
+                    console.log('Operación de compartir cancelada o no soportada.');
+                }
+            } else {
+                const tempInput = document.createElement("textarea");
+                tempInput.value = textoMensaje + " " + imagenUrl;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand("copy");
+                document.body.removeChild(tempInput);
+                
+                const originalHTML = btnElement.innerHTML;
+                btnElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9abf38" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+                setTimeout(() => { btnElement.innerHTML = originalHTML; }, 2000);
+            }
+        };
+
         function crearMarcadores() {
             grupoRestaurantes.clearLayers();
             grupoPastelerias.clearLayers();
 
-            establecimientos.forEach(est => {
+            establecimientos.forEach((est, index) => {
                 let esRestaurante = est.categoria.toLowerCase().includes('restaurante');
                 let iconClass = esRestaurante ? 'dot-restaurante' : 'dot-pasteleria';
                 
@@ -552,7 +609,12 @@
                     <div class="popup-content">
                         <img src="${imagenUrl}" alt="Imagen del local" class="popup-imagen">
                         <div class="popup-info">
-                            <h3>${est.nombre}</h3>
+                            <div class="cabecera-popup">
+                                <h3>${est.nombre}</h3>
+                                <button class="btn-compartir" onclick="compartirLocal(${index}, this)" title="Compartir este local">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                                </button>
+                            </div>
                             <p><strong>Dirección:</strong> ${est.direccion}</p>
                             <div class="popup-desc">${est.descripcion}</div>
                         </div>
