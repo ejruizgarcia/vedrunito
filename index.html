@@ -52,6 +52,7 @@
             font-size: 18px;
             font-weight: bold;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
             z-index: 10;
             padding: 0;
             text-decoration: none;
@@ -246,9 +247,14 @@
             padding: 15px 20px 0 20px;
         }
 
-        .modal-filtros-categoria,
-        .modal-filtros-ciudad {
+        .modal-filtros-container {
             padding: 15px 20px 0 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .filtros-fila {
             display: flex;
             gap: 20px;
         }
@@ -261,11 +267,6 @@
             font-size: 14px;
             box-sizing: border-box;
             outline: none;
-            transition: border-color 0.2s;
-        }
-
-        #buscador-listado:focus {
-            border-color: #9abf38;
         }
 
         #lista-establecimientos {
@@ -278,11 +279,6 @@
             padding: 12px 10px;
             border-bottom: 1px solid #eee;
             cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .item-lista:hover {
-            background: #f9f9f9;
         }
 
         .item-lista h4 {
@@ -331,29 +327,31 @@
             <div class="modal-buscador-container">
                 <input type="text" id="buscador-listado" placeholder="Buscar establecimiento o dirección...">
             </div>
-            <div class="modal-filtros-categoria">
-                <label class="toggle-label">
-                    <input type="checkbox" id="filtro-listado-restaurantes" checked>
-                    <div class="toggle-switch verde"></div>
-                    Restaurantes
-                </label>
-                <label class="toggle-label">
-                    <input type="checkbox" id="filtro-listado-pastelerias" checked>
-                    <div class="toggle-switch marron"></div>
-                    Pastelerías
-                </label>
-            </div>
-            <div class="modal-filtros-ciudad">
-                <label class="toggle-label">
-                    <input type="checkbox" id="filtro-sf" checked>
-                    <div class="toggle-switch ciudad"></div>
-                    San Fernando
-                </label>
-                <label class="toggle-label">
-                    <input type="checkbox" id="filtro-chiclana" checked>
-                    <div class="toggle-switch ciudad"></div>
-                    Chiclana
-                </label>
+            <div class="modal-filtros-container">
+                <div class="filtros-fila">
+                    <label class="toggle-label">
+                        <input type="checkbox" id="filtro-listado-restaurantes" checked>
+                        <div class="toggle-switch verde"></div>
+                        Restaurantes
+                    </label>
+                    <label class="toggle-label">
+                        <input type="checkbox" id="filtro-listado-pastelerias" checked>
+                        <div class="toggle-switch marron"></div>
+                        Pastelerías
+                    </label>
+                </div>
+                <div class="filtros-fila">
+                    <label class="toggle-label">
+                        <input type="checkbox" id="filtro-sf" checked>
+                        <div class="toggle-switch ciudad"></div>
+                        San Fernando
+                    </label>
+                    <label class="toggle-label">
+                        <input type="checkbox" id="filtro-chiclana" checked>
+                        <div class="toggle-switch ciudad"></div>
+                        Chiclana
+                    </label>
+                </div>
             </div>
             <div id="lista-establecimientos"></div>
         </div>
@@ -370,226 +368,103 @@
 
         let establecimientos = [
             { 
-                nombre: "Bodega Rocio", 
-                direccion: "Calle Augusto Miranda 13, 11100 San Fernando", 
-                categoria: "Restaurante", 
-                ciudad: "San Fernando", 
-                imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito22.png",
-                lat: 36.4687765, lng: -6.1927164,
+                nombre: "Bodega Rocio", direccion: "Calle Augusto Miranda 13, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", lat: 36.4687765, lng: -6.1927164, imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito22.png",
                 descripcion: "Una creación de autor que homenajea la repostería de Écija con una técnica de emulsión que logra una cremosidad extrema. Un dulce elegante y envolvente, diseñado para seducir el paladar con su postgusto prolongado y sutil."
             },
             { 
-                nombre: "Bombon Boss", 
-                direccion: "Bahía Sur, C/ Caño Herrera s/n, 11100 San Fernando", 
-                categoria: "Pastelerías", 
-                ciudad: "San Fernando", 
-                lat: 36.472633, lng: -6.2090027,
+                nombre: "Bombon Boss", direccion: "Bahía Sur, C/ Caño Herrera s/n, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando", lat: 36.472633, lng: -6.2090027,
                 descripcion: "La excelencia de un croissant de mantequilla artesanal que se transforma mediante un relleno de crema de almendra de sabor intenso. Decorado con azúcar glasé y almendras laminadas tostadas, ofrece un contraste perfecto entre la ternura del hojaldre y el crujiente exterior."
             },
             { 
-                nombre: "Restaurante Brasarte", 
-                direccion: "C. Real, 26, 11100 San Fernando, Cádiz", 
-                categoria: "Restaurante", 
-                ciudad: "San Fernando", 
-                imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito11.png", 
-                lat: 36.4663088, lng: -6.1958385,
+                nombre: "Restaurante Brasarte", direccion: "C. Real, 26, 11100 San Fernando, Cádiz", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito11.png", lat: 36.4663088, lng: -6.1958385,
                 descripcion: "Un vanguardista trampantojo visual de mandarina que desafía la percepción con sus texturas de almendra sin renunciar a los sabores de siempre. Combina un núcleo de bizcocho artesanal de Amaretto, crema sedosa de mandarina y un semifrío de almendra."
             },
             { 
-                nombre: "Restaurante Cantina Del Titi", 
-                direccion: "Playa De La Casería s/n, 11100 San Fernando", 
-                categoria: "Restaurante", 
-                ciudad: "San Fernando", 
-                imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito17.png", 
-                lat: 36.4849694, lng: -6.2014389,
+                nombre: "Restaurante Cantina Del Titi", direccion: "Playa De La Casería s/n, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito17.png", lat: 36.4849694, lng: -6.2014389,
                 descripcion: "Una sofisticada tarta de queso mascarpone seleccionada por su textura sedosa e infusionada con esencia de vainilla y canela. Su perfil aromático cálido se complementa con una capa de yema tostada y el crujiente natural de los piñones seleccionados."
             },
             { 
-                nombre: "Don Panes", 
-                direccion: "Centro Comercial Bahía Sur, 11100 San Fernando", 
-                categoria: "Pastelerías", 
-                ciudad: "San Fernando", 
-                lat: 36.4719256, lng: -6.2106228,
+                nombre: "Don Panes", direccion: "Centro Comercial Bahía Sur, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando", lat: 36.4719256, lng: -6.2106228,
                 descripcion: "Una reinterpretación de la leche frita clásica de la casa, infusionada con turrón de Jijona para lograr una textura excepcionalmente untuosa. Se acompaña de una mousse ligera de turrón y un crocanti de almendra que aporta el contrapunto crujiente necesario."
             },
             { 
-                nombre: "Restaurante El Cuartel Del Mar", 
-                direccion: "Torre Del Puerco, Chiclana, 11139 Chiclana De La Frontera", 
-                categoria: "Restaurante", 
-                ciudad: "Chiclana", 
-                imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito8.png", 
-                lat: 36.3323441, lng: -6.1599398,
+                nombre: "Restaurante El Cuartel Del Mar", direccion: "Torre Del Puerco, Chiclana, 11139 Chiclana De La Frontera", categoria: "Restaurante", ciudad: "Chiclana", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito8.png", lat: 36.3323441, lng: -6.1599398,
                 descripcion: "Bajo el cariñoso nombre de Vedrunito, este postre reinterpreta la Tarta de Santiago con un toque de frescura cítrica. Un bizcocho de almendra jugoso napado con crema de limón y mantequilla, servido con helado de nata fresca para un delicioso contraste térmico."
             },
             { 
-                nombre: "El Rincón del Celiaco", 
-                direccion: "Avenida Ronda Del Estero Nº 66, Local. 11100, San Fernando", 
-                categoria: "Pastelerías", 
-                ciudad: "San Fernando", 
-                imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito6.png", 
-                lat: 36.4490074, lng: -6.2059021,
+                nombre: "El Rincón del Celiaco", direccion: "Avenida Ronda Del Estero Nº 66, Local. 11100, San Fernando", categoria: "Pastelerías", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito6.png", lat: 36.4490074, lng: -6.2059021,
                 descripcion: "Un mini croissant artesanal diseñado para ser 100% libre de gluten, armonizando la ligereza del hojaldre con la untuosidad de la crema de almendras. Bañado en miel natural para un brillo y dulzor persistentes, es un bocado reconfortante que garantiza una calidad organoléptica idéntica a la convencional."
             },
             { 
-                nombre: "Restaurante Brasería Flor de Tuna", 
-                direccion: "Carretera De Medina, 91, 11130 Chiclana De La Frontera", 
-                categoria: "Restaurante", 
-                ciudad: "Chiclana", 
-                imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito10.png", 
-                lat: 36.4158834, lng: -6.1345589,
+                nombre: "Restaurante Brasería Flor de Tuna", direccion: "Carretera De Medina, 91, 11130 Chiclana De La Frontera", categoria: "Restaurante", ciudad: "Chiclana", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito10.png", lat: 36.4158834, lng: -6.1345589,
                 descripcion: "Un tributo a la espiritualidad de las Carmelitas de la Caridad Vedruna que eleva ingredientes humildes como la almendra, el huevo y la miel. Consta de un bizcocho fino de almendra con flan de turrón, yema tostada y el toque local del moscatel de Chiclana."
             },
             { 
-                nombre: "Hornos La Española", 
-                direccion: "Avda. Del Trabajo, 23, Pol. Ind. El Torno, 11130 Chiclana", 
-                categoria: "Pastelerías", 
-                ciudad: "Chiclana", 
-                imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito9.png", 
-                lat: 36.4268334, lng: -6.1476445,
+                nombre: "Hornos La Española", direccion: "Avda. Del Trabajo, 23, Pol. Ind. El Torno, 11130 Chiclana", categoria: "Pastelerías", ciudad: "Chiclana", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito9.png", lat: 36.4268334, lng: -6.1476445,
                 descripcion: "Disfruta de un bocado de pura tradición con estas pastas de té artesanas que combinan la riqueza del mazapán con un delicado toque de vainilla. Una propuesta elegante cuya textura tierna y fundente se deshace en la boca, dejando una irresistible sensación cremosa y persistente."
             },
             { 
-                nombre: "Panadería José Butrón", 
-                direccion: "Avda. De La Diputación, 88, 11130 Chiclana De La Frontera", 
-                categoria: "Pastelerías", 
-                ciudad: "Chiclana", 
-                imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito13.png", 
-                lat: 36.4101362, lng: -6.1664629,
+                nombre: "Panadería José Butrón", direccion: "Avda. De La Diputación, 88, 11130 Chiclana De La Frontera", categoria: "Pastelerías", ciudad: "Chiclana", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito13.png", lat: 36.4101362, lng: -6.1664629,
                 descripcion: "Un legado vivo basado en una receta casera transmitida por la abuela María que prioriza el sabor auténtico. Se trata de una masa tierna de manteca y azúcar protegida por una costra dorada de canela caramelizada y granillo de almendra crujiente."
             },
             { 
-                nombre: "La Cookería", 
-                direccion: "C/ San Rafael 1, 11100 San Fernando", 
-                categoria: "Pastelerías", 
-                ciudad: "San Fernando", 
-                imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito20.png",
-                lat: 36.4685349, lng: -6.1961389,
+                nombre: "La Cookería", direccion: "C/ San Rafael 1, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando", lat: 36.4685349, lng: -6.1961389, imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito20.png",
                 descripcion: "Una experiencia sensorial compleja basada en una masa artesanal de mantequilla tostada (beurre noisette) y harina de almendra. Su corazón cremoso de praliné con un toque de sal y el crocanti de almendra caramelizada crean un equilibrio preciso de matices tostados."
             },
             { 
-                nombre: "Productos Artesanos La Familia", 
-                direccion: "C/ Real, 199, 11100 San Fernando", 
-                categoria: "Pastelerías", 
-                ciudad: "San Fernando", 
-                imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito16.png", 
-                lat: 36.4595009, lng: -6.201911,
+                nombre: "Productos Artesanos La Familia", direccion: "C/ Real, 199, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito16.png", lat: 36.4595009, lng: -6.201911,
                 descripcion: "Una propuesta ambiciosa que busca el equilibrio entre el crujiente hojaldre artesanal y la untuosidad de dos pilares del dulce: el tocino de cielo y el praliné de almendra. Esta creación se concibe como una bomba de sabor coronada con nata de alta calidad y almendra laminada."
             },
             { 
-                nombre: "Restaurante La Tapería de Ari", 
-                direccion: "Calle Mineras 10, 11100 San Fernando", 
-                categoria: "Restaurante", 
-                ciudad: "San Fernando", 
-                imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito15.png", 
-                lat: 36.448386, lng: -6.2109929,
+                nombre: "Restaurante La Tapería de Ari", direccion: "Calle Mineras 10, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito15.png", lat: 36.448386, lng: -6.2109929,
                 descripcion: "Una reinterpretación del clásico alfajor argentino que busca el equilibrio entre el dulce de leche y la acidez de los frutos del bosque. Estructurado sobre una masa sablé de almendras, se corona con arándanos frescos y virutas de chocolate amargo."
             },
             { 
-                nombre: "La Tentación", 
-                direccion: "C/ Juan De Mariana, 20, 11100 San Fernando", 
-                categoria: "Pastelerías", 
-                ciudad: "San Fernando", 
-                imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito35.png",
-                lat: 36.4677044, lng: -6.1961013,
+                nombre: "La Tentación", direccion: "C/ Juan De Mariana, 20, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando", lat: 36.4677044, lng: -6.1961013, imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito35.png",
                 descripcion: "Una sofisticada tarta de queso que fusiona la suavidad del chocolate blanco con la elegancia de un corazón fluido de praliné de almendra. Presentada sobre un crujiente de galleta y coronada con almendra laminada, es una delicia técnica de textura cremosa y aireada."
             },
             { 
-                nombre: "Restaurante Los Napolitanos", 
-                direccion: "Calle General Pujales 19, 11100 San Fernando", 
-                categoria: "Restaurante", 
-                ciudad: "San Fernando", 
-                imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito3.png", 
-                lat: 36.4665936, lng: -6.2035096,
+                nombre: "Restaurante Los Napolitanos", direccion: "Calle General Pujales 19, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito3.png", lat: 36.4665936, lng: -6.2035096,
                 descripcion: "Un tiramisú inspirado en la historia popular de Treviso que combina la intensidad del café con la delicadeza de la almendra. Bizcocho de soletilla bañado en espresso y leche de almendras, con crema de mascarpone y trocitios de fruto seco natural."
             },
             { 
-                nombre: "Panadería El Pilar", 
-                direccion: "C/ San Rafael 58, 11100 San Fernando", 
-                categoria: "Pastelerías", 
-                ciudad: "San Fernando", 
-                imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito31.png",
-                lat: 36.4720636, lng: -6.1950445,
+                nombre: "Panadería El Pilar", direccion: "C/ San Rafael 58, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando", lat: 36.4720636, lng: -6.1950445, imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito31.png",
                 descripcion: "Una propuesta inclusiva y sofisticada que prescinde totalmente del gluten, utilizando la almendra como único elemento estructural. Combina un bizcocho de chocolate muy húmedo con crema de almendra y trozos tostados, sellado con una ganache de tres intensidades de cacao."
             },
             { 
-                nombre: "Pastelería La Rosa", 
-                direccion: "Calle Plutón 15, 11130 Chiclana De La Frontera", 
-                categoria: "Pastelerías", 
-                ciudad: "Chiclana", 
-                imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito4.png", 
-                lat: 36.4265809, lng: -6.1394584,
+                nombre: "Pastelería La Rosa", direccion: "Calle Plutón 15, 11130 Chiclana De La Frontera", categoria: "Pastelerías", ciudad: "Chiclana", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito4.png", lat: 36.4265809, lng: -6.1394584,
                 descripcion: "Repostería fina que eleva el concepto del mazapán tradicional mediante una técnica de refinado en piedra de granito que libera los aceites esenciales de la almendra. Una pieza de núcleo tierno y frescura absoluta que conserva toda la intensidad aromática del fruto."
             },
             { 
-                nombre: "Pastelería Selva Dulce", 
-                direccion: "Almirante León Herrero 31, 11100 San Fernando", 
-                categoria: "Pastelerías", 
-                ciudad: "San Fernando", 
-                imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito33.png", 
-                lat: 36.4641949, lng: -6.2023401,
+                nombre: "Pastelería Selva Dulce", direccion: "Almirante León Herrero 31, 11100 San Fernando", categoria: "Pastelerías", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito33.png", lat: 36.4641949, lng: -6.2023401,
                 descripcion: "Inspirado en el histórico postre de los pastores, este dulce rescata la esencia del campo andaluz utilizando ingredientes como la almendra, el aceite de oliva y la naranja. Un bizcocho húmedo y noble elevado con una profunda ganache de chocolate negro para unir la herencia rural con la alta repostería."
             },
             { 
-                nombre: "Restaurante Purataberna", 
-                direccion: "Pl. de las Alegrías, 11100 San Fernando, Cádiz", 
-                categoria: "Restaurante", 
-                ciudad: "San Fernando", 
-                imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito34.png",
-                lat: 36.4494432, lng: -6.2109929,
+                nombre: "Restaurante Purataberna", direccion: "Pl. de las Alegrías, 11100 San Fernando, Cádiz", categoria: "Restaurante", ciudad: "San Fernando", lat: 36.4494432, lng: -6.2109929, imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito34.png",
                 descripcion: "Un bizcocho de técnica refinada donde la almendra es la base estructural, logrando una textura aireada y especialmente tierna. Servido templado para potenciar la fragancia del cacao y la frutosidad del fruto seco, ofrece una experiencia envolvente y reconfortante."
             },
             { 
-                nombre: "Restaurante Rincón de Pepe Valero", 
-                direccion: "Calle Real 101 San Fernando Cádiz", 
-                categoria: "Restaurante", 
-                ciudad: "San Fernando", 
-                imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito14.png", 
-                lat: 36.4647385, lng: -6.1973995,
+                nombre: "Restaurante Rincón de Pepe Valero", direccion: "Calle Real 101 San Fernando Cádiz", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito14.png", lat: 36.4647385, lng: -6.1973995,
                 descripcion: "Denominado La Flor de la Canela, este postre evoca un jardín comestible envuelto en humo de canela. Incluye un cannoli de harina de almendra y maíz morado, melaza de higo y perlas de leche de almendras que estallan en el paladar."
             },
             { 
-                nombre: "Restaurante Esencias del Mar", 
-                direccion: "Cc Bahía Sur, Caño Herrera s/n, 11100 San Fernando", 
-                categoria: "Restaurante", 
-                ciudad: "San Fernando", 
-                imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito5.png", 
-                lat: 36.4726848, lng: -6.2094855,
+                nombre: "Restaurante Esencias del Mar", direccion: "Cc Bahía Sur, Caño Herrera s/n, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito5.png", lat: 36.4726848, lng: -6.2094855,
                 descripcion: "El postre Alma de Vedrunita con almendras es un viaje a la repostería de clausura de las Hermanas Clarisas de Antequera. Combina un bizcocho tierno con mermelada de albaricoque, cabello de ángel y una masa artesanal de almendras, canela y limón."
             },
             { 
-                nombre: "Restaurante Montjuic", 
-                direccion: "C/ Colón, 55, 11100 San Fernando", 
-                categoria: "Restaurante", 
-                ciudad: "San Fernando", 
-                imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito7.png", 
-                lat: 36.4693028, lng: -6.198467,
+                nombre: "Restaurante Montjuic", direccion: "C/ Colón, 55, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito7.png", lat: 36.4693028, lng: -6.198467,
                 descripcion: "Este Canelón Dulce con Crocanti de Almendra fusiona un formato icónico con la tradición de la mousse de turrón de Jijona. Envuelto en una masa artesanal aromatizada con canela y bañado en natillas y dulce de leche, ofrece un festín de texturas dulces y crujientes."
             },
             { 
-                nombre: "Restaurante Reyes Católicos", 
-                direccion: "Avda. Reyes Católicos s/n, 11100 San Fernando", 
-                categoria: "Restaurante", 
-                ciudad: "San Fernando", 
-                imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito21.png",
-                lat: 36.4694408, lng: -6.1993468,
+                nombre: "Restaurante Reyes Católicos", direccion: "Avda. Reyes Católicos s/n, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", lat: 36.4694408, lng: -6.1993468, imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito21.png",
                 descripcion: "Inspirada en la pureza de Santa Joaquina, esta tarta de queso destaca por su relleno blanco de crema suave y equilibrada. La almendra natural tostada y el sirope de frambuesas caramelizadas aportan profundidad de sabor y un contraste fresco y crujiente."
             },
             { 
-                nombre: "Restaurante Salinas de Chiclana", 
-                direccion: "Salina Santa María De Jesús, Camino De, 11130 Chiclana", 
-                categoria: "Restaurante", 
-                ciudad: "Chiclana", 
-                imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito30.png",
-                lat: 36.3868801, lng: -6.1870623,
+                nombre: "Restaurante Salinas de Chiclana", direccion: "Salina Santa María De Jesús, Camino De, 11130 Chiclana", categoria: "Restaurante", ciudad: "Chiclana", lat: 36.3868801, lng: -6.1870623, imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito30.png",
                 descripcion: "Bajo el nombre Veracha, esta pieza rinde tributo al paisaje salinero imitando las montañas de sal de las marismas. Una pirámide de chocolate blanco que oculta un relleno audaz de almendras locales, camarones deshidratados y flor de sal para una experiencia umami única."
             },
             { 
-                nombre: "Trattoria Pizzería Nello's", 
-                direccion: "Calle San Federico 52, 11100 San Fernando", 
-                categoria: "Restaurante", 
-                ciudad: "San Fernando", 
-                imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito2.png", 
-                lat: 36.4761616, lng: -6.1983061,
+                nombre: "Trattoria Pizzería Nello's", direccion: "Calle San Federico 52, 11100 San Fernando", categoria: "Restaurante", ciudad: "San Fernando", imagen: "https://raw.githubusercontent.com/ejruizgarcia/images/main/vedrunito2.png", lat: 36.4761616, lng: -6.1983061,
                 descripcion: "Una propuesta inspirada en la tradición de la Isla de Capri que celebra la unión del chocolate fondant con la almendra. El postre integra diversas texturas de almendra en una pasta de chocolate, coronada con láminas crujientes y un delicado espolvoreado de azúcar glas."
             }
         ];
@@ -650,8 +525,8 @@
             const textoBusqueda = document.getElementById('buscador-listado').value.toLowerCase();
             const mostrarSF = document.getElementById('filtro-sf').checked;
             const mostrarChiclana = document.getElementById('filtro-chiclana').checked;
-            const mostrarRestaurantesListado = document.getElementById('filtro-listado-restaurantes').checked;
-            const mostrarPasteleriasListado = document.getElementById('filtro-listado-pastelerias').checked;
+            const mostrarRestListado = document.getElementById('filtro-listado-restaurantes').checked;
+            const mostrarPastListado = document.getElementById('filtro-listado-pastelerias').checked;
             
             const ordenados = [...establecimientos].sort((a, b) => a.nombre.localeCompare(b.nombre));
             
@@ -659,9 +534,9 @@
                 let esRestaurante = est.categoria.toLowerCase().includes('restaurante');
                 let pasaBusqueda = est.nombre.toLowerCase().includes(textoBusqueda) || est.direccion.toLowerCase().includes(textoBusqueda);
                 let pasaCiudad = (est.ciudad === "San Fernando" && mostrarSF) || (est.ciudad === "Chiclana" && mostrarChiclana);
-                let pasaCategoria = (esRestaurante && mostrarRestaurantesListado) || (!esRestaurante && mostrarPasteleriasListado);
+                let pasaCat = (esRestaurante && mostrarRestListado) || (!esRestaurante && mostrarPastListado);
 
-                if (pasaBusqueda && pasaCiudad && pasaCategoria) {
+                if (pasaBusqueda && pasaCiudad && pasaCat) {
                     let div = document.createElement('div');
                     div.className = 'item-lista';
                     div.innerHTML = `<h4>${est.nombre}</h4><p>${est.direccion}</p>`;
